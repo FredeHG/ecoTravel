@@ -16,7 +16,7 @@ class Inicio extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 _titulos(),
-                _botonesRedondeados(),
+                _botonesRedondeados(context),
               ],
             ),
           )
@@ -77,10 +77,7 @@ class Inicio extends StatelessWidget {
         children: [
           Text(
             'EcoTravel',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 10.0),
           Text(
@@ -95,44 +92,41 @@ class Inicio extends StatelessWidget {
     );
   }
 
-  Widget _botonesRedondeados() {
+  Widget _botonesRedondeados(BuildContext context) {
     return Table(
       children: [
         TableRow(
           children: [
-            _crearBotonRedondeado(Colors.blue, Icons.bus_alert, 'Horarios'),
-            _crearBotonRedondeado(
-                Colors.purpleAccent, Icons.directions_bus, 'Recorridos'),
+            _crearBotonRedondeado(Colors.blue, Icons.bus_alert, 'Horarios', context),
+            _crearBotonRedondeado(Colors.purpleAccent, Icons.directions_bus, 'Recorridos', context),
           ],
         ),
         TableRow(
           children: [
-            _crearBotonRedondeado(Colors.redAccent, Icons.payment, 'Comprar'),
-            _crearBotonRedondeado(
-                Colors.pinkAccent, Icons.monetization_on, 'Subscripciones'),
+            _crearBotonRedondeado(Colors.redAccent, Icons.payment, 'Comprar', context),
+            _crearBotonRedondeado(Colors.pinkAccent, Icons.monetization_on, 'Subscripciones', context),
           ],
         ),
         TableRow(
           children: [
-            _crearBotonRedondeado(Colors.amberAccent, Icons.book, 'Mis viajes'),
-            _crearBotonRedondeado(
-                Colors.orangeAccent, Icons.settings, 'Configuración'),
+            _crearBotonRedondeado(Colors.amberAccent, Icons.book, 'Mis viajes', context),
+            _crearBotonRedondeado(Colors.orangeAccent, Icons.settings, 'Configuración', context),
           ],
         ),
         TableRow(
           children: [
-            _crearBotonRedondeado(Colors.blueGrey, Icons.warning, 'Alerta'),
-            _crearBotonRedondeado(Colors.greenAccent, Icons.warning, 'Alerta'),
+            _crearBotonRedondeado(Colors.blueGrey, Icons.warning, 'Alerta', context),
+            _crearBotonRedondeado(Colors.greenAccent, Icons.warning, 'Alerta', context),
           ],
         ),
       ],
     );
   }
 
-  Widget _crearBotonRedondeado(Color color, IconData icono, String texto) {
+  Widget _crearBotonRedondeado(Color color, IconData icono, String texto, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, route);
+        Navigator.pushNamed(context, 'pages/buy_page');
       },
       child: Padding(
         padding: const EdgeInsets.all(15.0),

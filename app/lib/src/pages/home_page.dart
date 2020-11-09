@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:app/src/pages/boleto_page.dart';
-import 'package:app/src/pages/scanner_page.dart';
 import 'package:flutter/material.dart';
 
 import 'inicio_page.dart';
