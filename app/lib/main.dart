@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'src/pages/home_page.dart';
+import 'src/pages/maps_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,7 +17,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'EcoTravel',
       initialRoute: 'homePage',
-      routes: {'homePage': (BuildContext context) => HomePage(), 'pages/buy_page': (BuildContext context) => BuyPage()},
+      routes: {
+        'homePage': (BuildContext context) => HomePage(),
+        'pages/buy_page': (BuildContext context) => BuyPage(),
+        'pages/maps': (BuildContext context) => MapsPage(),
+      },
       theme: ThemeData(
         primaryColor: Colors.pinkAccent,
         canvasColor: Color.fromRGBO(55, 57, 84, 1.0),

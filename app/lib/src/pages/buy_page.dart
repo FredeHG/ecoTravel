@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'package:mercado_pago_mobile_checkout/mercado_pago_mobile_checkout.dart';
+
 class BuyPage extends StatefulWidget {
   @override
   _BuyPageState createState() => _BuyPageState();
@@ -29,6 +31,7 @@ class _BuyPageState extends State<BuyPage> {
             _titulos(),
             _form(),
             _calendar(),
+            _boton(),
           ],
         ),
       ),
@@ -36,17 +39,11 @@ class _BuyPageState extends State<BuyPage> {
   }
 
   Widget _titulos() {
-    return Container(
-      padding: EdgeInsets.all(30.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '¿A donde vamos?',
-            style: TextStyle(color: Colors.blueAccent, fontSize: 30.0, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 10.0),
-        ],
+    return ListTile(
+      contentPadding: EdgeInsets.only(bottom: 100.0, left: 10),
+      title: Text(
+        '¿A donde vamos?',
+        style: TextStyle(color: Colors.blueAccent, fontSize: 30.0, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -135,6 +132,15 @@ class _BuyPageState extends State<BuyPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _boton() {
+    return RaisedButton(
+      onPressed: () {
+        MercadoPagoMobileCheckout.startCheckout(
+            'TEST-aa0ed958-9b92-4167-85f8-2e8de98f1762', '137450911-da6b7350-00e5-47c3-9476-0f3fe0983ff9');
+      },
     );
   }
 }

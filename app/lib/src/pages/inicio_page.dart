@@ -63,6 +63,7 @@ class Inicio extends StatelessWidget {
         gradiente,
         Positioned(
           top: -100.0,
+          left: -80.0,
           child: cajaRosa,
         ),
       ],
@@ -97,36 +98,37 @@ class Inicio extends StatelessWidget {
       children: [
         TableRow(
           children: [
-            _crearBotonRedondeado(Colors.blue, Icons.bus_alert, 'Horarios', context),
-            _crearBotonRedondeado(Colors.purpleAccent, Icons.directions_bus, 'Recorridos', context),
+            _crearBotonRedondeado(Colors.blue, Icons.bus_alert, 'Horarios', context, 'pages/buy_page'),
+            _crearBotonRedondeado(Colors.purpleAccent, Icons.directions_bus, 'Recorridos', context, 'pages/maps'),
           ],
         ),
         TableRow(
           children: [
-            _crearBotonRedondeado(Colors.redAccent, Icons.payment, 'Comprar', context),
-            _crearBotonRedondeado(Colors.pinkAccent, Icons.monetization_on, 'Subscripciones', context),
+            _crearBotonRedondeado(Colors.redAccent, Icons.payment, 'Comprar', context, 'pages/buy_page'),
+            _crearBotonRedondeado(
+                Colors.pinkAccent, Icons.monetization_on, 'Subscripciones', context, 'pages/buy_page'),
           ],
         ),
         TableRow(
           children: [
-            _crearBotonRedondeado(Colors.amberAccent, Icons.book, 'Mis viajes', context),
-            _crearBotonRedondeado(Colors.orangeAccent, Icons.settings, 'Configuración', context),
+            _crearBotonRedondeado(Colors.amberAccent, Icons.book, 'Mis viajes', context, 'pages/buy_page'),
+            _crearBotonRedondeado(Colors.orangeAccent, Icons.settings, 'Configuración', context, 'pages/buy_page'),
           ],
         ),
         TableRow(
           children: [
-            _crearBotonRedondeado(Colors.blueGrey, Icons.warning, 'Alerta', context),
-            _crearBotonRedondeado(Colors.greenAccent, Icons.warning, 'Alerta', context),
+            _crearBotonRedondeado(Colors.blueGrey, Icons.warning, 'Alerta', context, 'pages/buy_page'),
+            _crearBotonRedondeado(Colors.greenAccent, Icons.warning, 'Alerta', context, 'pages/buy_page'),
           ],
         ),
       ],
     );
   }
 
-  Widget _crearBotonRedondeado(Color color, IconData icono, String texto, BuildContext context) {
+  Widget _crearBotonRedondeado(Color color, IconData icono, String texto, BuildContext context, String route) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'pages/buy_page');
+        Navigator.pushNamed(context, route);
       },
       child: Padding(
         padding: const EdgeInsets.all(15.0),
