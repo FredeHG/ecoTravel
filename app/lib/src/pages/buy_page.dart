@@ -12,6 +12,7 @@ class BuyPage extends StatefulWidget {
 }
 
 class _BuyPageState extends State<BuyPage> {
+  final EdgeInsets formScreenTopPadding = EdgeInsets.only(top: 46, left: 24, right: 24);
   List<String> _opt = [
     'UTN Medrano',
     'UTN Lugano',
@@ -25,14 +26,17 @@ class _BuyPageState extends State<BuyPage> {
   @override
   Widget build(BuildContext context) {
     return ContentTemplate(
-      SingleChildScrollView(
-        child: Column(
-          children: [
-            _titulos(),
-            _form(),
-            _calendar(),
-            _boton(),
-          ],
+      Padding(
+        padding: formScreenTopPadding,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _titulos(),
+              _form(),
+              _calendar(),
+              _botonBuy(),
+            ],
+          ),
         ),
       ),
     );
@@ -135,12 +139,17 @@ class _BuyPageState extends State<BuyPage> {
     );
   }
 
-  Widget _boton() {
-    return RaisedButton(
-      onPressed: () {
-        MercadoPagoMobileCheckout.startCheckout(
-            'TEST-aa0ed958-9b92-4167-85f8-2e8de98f1762', '137450911-da6b7350-00e5-47c3-9476-0f3fe0983ff9');
-      },
+  Widget _botonBuy() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 40.0),
+      child: ElevatedButton.icon(
+        label: Text("Realizar compra"),
+        icon: Icon(Icons.credit_card),
+        onPressed: () {
+          MercadoPagoMobileCheckout.startCheckout(
+              'TEST-aa0ed958-9b92-4167-85f8-2e8de98f1762', '137450911-da6b7350-00e5-47c3-9476-0f3fe0983ff9');
+        },
+      ),
     );
   }
 }

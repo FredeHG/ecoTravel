@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:app/src/helper/gradiente.dart';
 import 'package:flutter/material.dart';
 
@@ -39,15 +37,9 @@ class _ContentTemplateState extends State<ContentTemplate> {
             Positioned(left: -510.0, bottom: 100.0, child: pelota),
             Positioned(bottom: -500, child: pelota),
             ClipRRect(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50)),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: formScreenTopPadding,
-                  child: Container(
-                    width: double.infinity,
-                    child: widget.contentWidget,
-                  ),
-                ),
+              child: Container(
+                width: double.infinity,
+                child: widget.contentWidget,
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:app/src/helper/gradiente.dart';
 import 'package:flutter/material.dart';
 
 class Inicio extends StatelessWidget {
@@ -26,20 +27,7 @@ class Inicio extends StatelessWidget {
   }
 
   Widget _fondoApp() {
-    final gradiente = Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: FractionalOffset(0.0, 0.6),
-          end: FractionalOffset(0.0, 1.0),
-          colors: [
-            Color.fromRGBO(52, 54, 101, 1.0),
-            Color.fromRGBO(35, 37, 57, 1.0),
-          ],
-        ),
-      ),
-    );
+    final gradiente = getGradiente();
 
     final cajaRosa = Transform.rotate(
       angle: -pi / 5.0,
@@ -98,7 +86,7 @@ class Inicio extends StatelessWidget {
       children: [
         TableRow(
           children: [
-            _crearBotonRedondeado(Colors.blue, Icons.bus_alert, 'Horarios', context, 'pages/buy_page'),
+            _crearBotonRedondeado(Colors.blue, Icons.bus_alert, 'Horarios', context, 'pages/horario'),
             _crearBotonRedondeado(Colors.purpleAccent, Icons.directions_bus, 'Recorridos', context, 'pages/maps'),
           ],
         ),
@@ -106,19 +94,13 @@ class Inicio extends StatelessWidget {
           children: [
             _crearBotonRedondeado(Colors.redAccent, Icons.payment, 'Comprar', context, 'pages/buy_page'),
             _crearBotonRedondeado(
-                Colors.pinkAccent, Icons.monetization_on, 'Subscripciones', context, 'pages/buy_page'),
+                Colors.pinkAccent, Icons.monetization_on, 'Subscripciones', context, 'pages/mis_viajes'),
           ],
         ),
         TableRow(
           children: [
-            _crearBotonRedondeado(Colors.amberAccent, Icons.book, 'Mis viajes', context, 'pages/buy_page'),
-            _crearBotonRedondeado(Colors.orangeAccent, Icons.settings, 'Configuración', context, 'pages/buy_page'),
-          ],
-        ),
-        TableRow(
-          children: [
-            _crearBotonRedondeado(Colors.blueGrey, Icons.warning, 'Alerta', context, 'pages/buy_page'),
-            _crearBotonRedondeado(Colors.greenAccent, Icons.warning, 'Alerta', context, 'pages/buy_page'),
+            _crearBotonRedondeado(Colors.amberAccent, Icons.book, 'Mis viajes', context, 'pages/mis_viajes'),
+            _crearBotonRedondeado(Colors.orangeAccent, Icons.settings, 'Configuración', context, 'pages/mis_viajes'),
           ],
         ),
       ],

@@ -1,3 +1,4 @@
+import 'package:app/src/templates/ContentTemplate.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -11,46 +12,17 @@ class Boleto extends StatefulWidget {
 class _BoletoState extends State<Boleto> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: [
-          _fondoApp(),
-          Positioned(
-            top: 200,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _titulos(),
-                SizedBox(height: 20.0),
-                _boleto(),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _fondoApp() {
-    final gradiente = Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: FractionalOffset(0.0, 0.6),
-          end: FractionalOffset(0.0, 1.0),
-          colors: [
-            Color.fromRGBO(52, 54, 101, 1.0),
-            Color.fromRGBO(35, 37, 57, 1.0),
+    return ContentTemplate(
+      Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _titulos(),
+            SizedBox(height: 20.0),
+            _boleto(),
           ],
         ),
       ),
-    );
-
-    return Stack(
-      children: <Widget>[
-        gradiente,
-      ],
     );
   }
 
@@ -62,10 +34,7 @@ class _BoletoState extends State<Boleto> {
         children: [
           Text(
             'Muestre el QR al conductor',
-            style: TextStyle(
-                color: Colors.pinkAccent,
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.pinkAccent, fontSize: 25.0, fontWeight: FontWeight.bold),
           ),
         ],
       ),
