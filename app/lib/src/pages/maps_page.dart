@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MapsPage extends StatefulWidget {
   @override
@@ -31,64 +33,21 @@ class _MapsPage extends State<MapsPage> {
 
   List<LatLng> polylineCoordinates = [];
   Map<PolylineId, Polyline> polylines = {};
-
+  List<dynamic> dataTravels;
   //icons
   BitmapDescriptor collegeBitmap;
 
-  List<String> _opt = [
-    'Estacion Ezeiza - UTN Lugano',
-    'Estacion Ezeiza - UTN Medrano',
-    'UTN Lugano - UTN Medrano',
-    'UTN Lugano - Obelisco',
-    'UTN Lugano - Estacion Ezeiza',
-    'UTN Medrano - UTN Lugano',
-    'UTN Medrano - Aeropuerto',
-    'Obelisco - UTN Medrano',
-    'Obelisco - Aeropuerto',
-    'Obelisco - Estacion Ezeiza',
-  ];
   var _currentItem;
 
   Future<bool> updatePoly() async {
     polylineCoordinates = [];
-    switch (_currentItem) {
-      case 'Estacion Ezeiza - UTN Lugano':
-        await _createPolylines(getPosition(ezeizaEstacion), getPosition(utnLugano));
+    var travel;
+    for (var item in dataTravels) {
+      if (item['_id'] == _currentItem) {
+        travel = item;
+        await _createPolylines(getPosition(travel['origin']), getPosition(travel['destination']));
         break;
-      case 'Estacion Ezeiza - UTN Medrano':
-        await _createPolylines(getPosition(ezeizaEstacion), getPosition(utnMedrano));
-        break;
-      case 'Estacion Ezeiza - Aeropuerto':
-        await _createPolylines(getPosition(ezeizaEstacion), getPosition(ezeizaAeropuerto));
-        break;
-      case 'UTN Lugano - UTN Medrano':
-        await _createPolylines(getPosition(utnLugano), getPosition(utnMedrano));
-        break;
-      case 'UTN Lugano - Obelisco':
-        await _createPolylines(getPosition(utnLugano), getPosition(obelisco));
-        break;
-      case 'UTN Lugano - Estacion Ezeiza':
-        await _createPolylines(getPosition(utnLugano), getPosition(ezeizaEstacion));
-        break;
-      case 'UTN Medrano - UTN Lugano':
-        await _createPolylines(getPosition(utnMedrano), getPosition(utnLugano));
-        break;
-      case 'UTN Medrano - Aeropuerto':
-        await _createPolylines(getPosition(utnMedrano), getPosition(ezeizaAeropuerto));
-        break;
-      case 'Obelisco - UTN Medrano':
-        await _createPolylines(getPosition(obelisco), getPosition(utnMedrano));
-        break;
-      case 'Obelisco - Aeropuerto':
-        await _createPolylines(getPosition(obelisco), getPosition(ezeizaAeropuerto));
-        break;
-      case 'Obelisco - Estacion Ezeiza':
-        await _createPolylines(getPosition(obelisco), getPosition(ezeizaEstacion));
-        break;
-      case 'Aeropuerto - Obelisco':
-        await _createPolylines(getPosition(ezeizaAeropuerto), getPosition(obelisco));
-        break;
-      default:
+      }
     }
     setState(() {});
     return true;
@@ -132,10 +91,8 @@ class _MapsPage extends State<MapsPage> {
   _getCurrentLocation() async {
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((Position position) async {
       setState(() {
-        print("holas");
         // Store the position in the variable
         _currentPosition = position;
-        print('CURRENT POS: $_currentPosition');
 
         // For moving the camera to current location
         mapController.animateCamera(
@@ -162,10 +119,10 @@ class _MapsPage extends State<MapsPage> {
             child: Material(
               color: Colors.lightGreen[100],
               child: PopupMenuButton<String>(
-                itemBuilder: (BuildContext context) => _opt.map((String value) {
-                  return PopupMenuItem(
-                    value: value,
-                    child: Text(value),
+                itemBuilder: (BuildContext context) => dataTravels.map((value) {
+                  return PopupMenuItem<String>(
+                    child: Text(value['origin']['name'] + ' - ' + value['destination']['name']),
+                    value: value['_id'],
                   );
                 }).toList(),
                 icon: Icon(Icons.arrow_downward),
@@ -274,13 +231,13 @@ class _MapsPage extends State<MapsPage> {
   @override
   void initState() {
     super.initState();
+    getTravels();
     doMarker().then((value) {
       setState(() {
         loadMakers(markers);
       });
     });
     _getCurrentLocation();
-    _currentItem = _opt[0];
   }
 
   @override
@@ -328,16 +285,17 @@ class _MapsPage extends State<MapsPage> {
     return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
   }
 
-  Marker createMarker(double latitude, double longitude, BitmapDescriptor icon) {
+  Marker createMarker(point, BitmapDescriptor icon) {
+    var coordinates = point['coordinates'];
     return Marker(
-      markerId: MarkerId(latitude.toString() + longitude.toString()),
-      position: LatLng(latitude, longitude),
+      markerId: MarkerId(coordinates['latitude'].toString() + coordinates['longitude'].toString()),
+      position: LatLng(coordinates['latitude'], coordinates['longitude']),
       icon: icon,
     );
   }
 
-  Position getPosition(Marker marker) {
-    return Position(latitude: marker.position.latitude, longitude: marker.position.longitude);
+  Position getPosition(dynamic point) {
+    return Position(latitude: point['coordinates']['latitude'], longitude: point['coordinates']['longitude']);
   }
 
   Future<void> doMarker() async {
@@ -351,10 +309,19 @@ class _MapsPage extends State<MapsPage> {
     BitmapDescriptor estacionBit = BitmapDescriptor.fromBytes(estacionByte);
     BitmapDescriptor aeropuertoBit = BitmapDescriptor.fromBytes(aeropuertoByte);
     BitmapDescriptor obeliscoBit = BitmapDescriptor.fromBytes(obeliscoByte);
-    ezeizaEstacion = createMarker(-34.85460767970535, -58.5227744469394, estacionBit);
-    ezeizaAeropuerto = createMarker(-34.81304462362043, -58.543118375225546, aeropuertoBit);
-    utnLugano = createMarker(-34.65988508053708, -58.46830165054172, utnLuganoBit);
-    utnMedrano = createMarker(-34.59852777876844, -58.42025184128433, utnMedranoBit);
-    obelisco = createMarker(-34.60521127746405, -58.381242413429696, obeliscoBit);
+
+    http.Response response = await http.get('http://10.0.2.2:4000/api/points');
+    var dataPoints = json.decode(response.body)['points'];
+    ezeizaEstacion = createMarker(dataPoints[0], estacionBit);
+    utnLugano = createMarker(dataPoints[1], utnLuganoBit);
+    utnMedrano = createMarker(dataPoints[2], utnMedranoBit);
+    obelisco = createMarker(dataPoints[3], obeliscoBit);
+    ezeizaAeropuerto = createMarker(dataPoints[4], aeropuertoBit);
+  }
+
+  getTravels() async {
+    http.Response response = await http.get('http://10.0.2.2:4000/api/travels');
+    dataTravels = json.decode(response.body)['travels'];
+    setState(() {});
   }
 }

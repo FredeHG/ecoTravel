@@ -9,6 +9,7 @@ const cors = require('cors');
 app.use(morgan('dev'));
 app.use(cors());
 app.use(require('./routes/users'));
+app.use(require('./routes/travels'));
 
 
 

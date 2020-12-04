@@ -1,4 +1,4 @@
-const {Router} = require('express');
+const {Router, json} = require('express');
 const router = Router();
 
 const faker = require('faker');
